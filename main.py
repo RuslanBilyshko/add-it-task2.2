@@ -1,20 +1,18 @@
 import cmd
-from Doc import doc
-import argparse
+from Data import Data
 from figure.FCreator import fcreator
 
+# состояние изменений в коллекцию фигур
 
-def createParser(line: str):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-t', '--type', required=True, choices=fcreator.getTypes())
-    parser.add_argument('-n', '--name', required=True)
-    parser.add_argument('-w', '--width', default=20)
-    parser.add_argument('-r', '--radius', default=20)
-
-    return parser.parse_args(line.split())
+doc = Data.loadDoc()
 
 
 class Cli(cmd.Cmd):
+
+
+    _isChange = False
+
+
     def __init__(self):
         cmd.Cmd.__init__(self)
         self.prompt = "> "
@@ -30,9 +28,12 @@ class Cli(cmd.Cmd):
             print(doc.errorNotFoundFigure(
                 figure) + "\nВы можете посмотреть список доступных фигур выполнив команду <list>")
 
+
+
     def do_create(self, line: str):
         """Создание фигуры.
         Введите "create [--type тип_фигуры] параметры через пробел в виде [--параметр значение]"
+        Например: create --type square --name f3 -radius 50
         Для просмотра доступных типов и их параметров введите get_types"""
 
         # create -t square -n f3 -r 50
@@ -42,6 +43,7 @@ class Cli(cmd.Cmd):
             print(doc.errorIsHasFigure(f.name))
         else:
             doc.add(f)
+            self._isChange = True
             print(doc.successCreateFigure(f.name))
 
     def do_edit(self, line: str):
@@ -62,8 +64,19 @@ class Cli(cmd.Cmd):
         print(doc)
 
     def do_get_types(self, line: str):
-        """Список доступных для создания типов фигур"""
+        """Список доступных типов для создания фигур"""
         print(fcreator.getTypes())
+
+    def do_exit(self, line):
+        """Выход из программы"""
+        if self._isChange:
+            inpt = input('Сохранить изменения? Y/N: ')
+            if inpt == 'y' or inpt == "н":
+                Data.saveDoc(doc)
+
+
+
+        return True
 
     def default(self, line):
         print("Несуществующая команда")

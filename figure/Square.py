@@ -10,7 +10,6 @@ class Square(Figure):
     def width(self, width):
         self.__width = float(width)
 
-
     @property
     def draw(self):
         return "draw"

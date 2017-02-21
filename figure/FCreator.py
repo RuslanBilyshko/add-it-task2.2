@@ -56,12 +56,12 @@ class FCreator(object):
         circle.radius(radius)
         return circle
 
+    #
+    # def getAvailableTypes(self):
+    #     return ''.join('Type: <{}> parameters: {}'.format(key, value) for key, value in self.__parameters.items())
 
-    def getAvailableTypes(self):
-        return ''.join('Type: <{}> parameters: {}'.format(key, value) for key, value in self.__parameters.items())
-
-    def getTypes(self) -> list:
-        return self.__types
+    def getTypes(self) -> str:
+        return "".join("{}\n".format(t) for t in self.__types)
 
 
 fcreator = FCreator()

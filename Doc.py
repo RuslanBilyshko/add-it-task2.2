@@ -7,10 +7,10 @@ class Doc(object):
 
     __collection = {}
 
-    def __init__(self):
-        self.add(Square("f1"))
-        self.add(Square("f2"))
-        self.add(Circle("f3"))
+    def __init__(self): pass
+        # self.add(Square("f1"))
+        # self.add(Square("f2"))
+        # self.add(Circle("f3"))
 
     def add(self, figure: Figure):
         self.__collection.update({figure.name: figure})
