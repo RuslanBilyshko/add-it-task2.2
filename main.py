@@ -9,13 +9,16 @@ silly = turtle.Turtle()
 
 # Загрузка данных из файла
 figure_list = Data.loadDoc()
-doc = Doc()
 
+# Инифиализация коллекции
+# для дальнейшей работе в текущем сеансе
+doc = Doc()
 for f in figure_list:
     doc.add(f)
 
-
+# Обьект консоли для работы
 class Cli(cmd.Cmd):
+
     # Внесены ли изменения в коллекцию фигур
     _isChange = False
 
