@@ -1,17 +1,23 @@
 import cmd
 from Data import Data
 from figure.FCreator import fcreator
+from Doc import Doc
+import turtle
 
-# состояние изменений в коллекцию фигур
+# Создание обьекта Turtle
+silly = turtle.Turtle()
 
-doc = Data.loadDoc()
+# Загрузка данных из файла
+figure_list = Data.loadDoc()
+doc = Doc()
+
+for f in figure_list:
+    doc.add(f)
 
 
 class Cli(cmd.Cmd):
-
-
+    # Внесены ли изменения в коллекцию фигур
     _isChange = False
-
 
     def __init__(self):
         cmd.Cmd.__init__(self)
@@ -23,12 +29,10 @@ class Cli(cmd.Cmd):
         """Распечатка фигуры\nДля вывода на экран введите "print <figure_name>"
         """
         if doc.has(figure):
-            print(doc.get(figure))
+            doc.get(figure).draw(silly)
         else:
             print(doc.errorNotFoundFigure(
                 figure) + "\nВы можете посмотреть список доступных фигур выполнив команду <list>")
-
-
 
     def do_create(self, line: str):
         """Создание фигуры.
@@ -36,7 +40,8 @@ class Cli(cmd.Cmd):
         Например: create --type square --name f3 -radius 50
         Для просмотра доступных типов и их параметров введите get_types"""
 
-        # create -t square -n f3 -r 50
+        # create -t square -n f3 -w 50
+        # create -t circle -n f8 -r 100
         f = fcreator.create(line)
 
         if doc.has(f.name):
@@ -55,9 +60,21 @@ class Cli(cmd.Cmd):
             figure = doc.get(params.name)
             figure = fcreator.edit(params, figure)
             doc.update(figure)
+            self._isChange = True
             print(doc.successUpdateFigure(figure.name))
         else:
             print(doc.errorNotFoundFigure(params.name))
+
+    def do_remove(self, figure: str):
+        """Удаление фигуры из коллекции "remove [имя_фигуры]" """
+
+        if doc.has(figure):
+            doc.remove(figure)
+            self._isChange = True
+            print(doc.successRemoveFigure(figure))
+        else:
+            print(doc.errorNotFoundFigure(figure))
+
 
     def do_list(self, line: str):
         """Список всех созданных фигур"""
@@ -73,8 +90,6 @@ class Cli(cmd.Cmd):
             inpt = input('Сохранить изменения? Y/N: ')
             if inpt == 'y' or inpt == "н":
                 Data.saveDoc(doc)
-
-
 
         return True
 

@@ -1,4 +1,4 @@
-from copyreg import constructor
+import turtle
 
 
 class Figure(object):
@@ -16,7 +16,7 @@ class Figure(object):
     def name(self, name):
         self.__name = name
 
-    def draw(self): pass
+    def draw(self, silly: turtle.Turtle): pass
 
     def toString(self) -> str: return ""
 

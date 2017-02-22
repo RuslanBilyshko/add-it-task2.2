@@ -7,19 +7,18 @@ class Doc(object):
 
     __collection = {}
 
-    def __init__(self): pass
-        # self.add(Square("f1"))
-        # self.add(Square("f2"))
-        # self.add(Circle("f3"))
-
     def add(self, figure: Figure):
         self.__collection.update({figure.name: figure})
 
     def update(self, figure: Figure):
         self.add(figure)
 
-    def get(self, key):
+    def get(self, key) -> dict:
         return self.__collection[key]
+
+    def remove(self, key):
+        self.__collection.pop(key)
+
 
     def has(self, key):
         if key in self.all():
@@ -42,6 +41,9 @@ class Doc(object):
     def successUpdateFigure(self, name: str) -> str:
         return "Фигура с именем \"{}\" успешно обновлена".format(name)
 
+    def successRemoveFigure(self, name: str) -> str:
+        return "Фигура с именем \"{}\" успешно удалена".format(name)
+
     def __str__(self):
 
         if len(self.all()) > 0:
@@ -53,8 +55,4 @@ class Doc(object):
         else:
             return"Пока не создано ниодной фигуры"
 
-
-
-
-doc = Doc()
 
